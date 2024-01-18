@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useEffect, useState} from 'react'
+import Form from './component/Form'
+import Card from './component/Card'
+import 'bootstrap/dist/css/bootstrap.css'
+import {api,api_key} from "./api/api.js"
 
-function App() {
+const App = () => {
+
+  const [data,setData] = useState({});
+  const [city,setCity] =useState("Singapore");
+
+  const fetchWeather = async()=>{
+    const res = await api.get( `/weather?q=${city}&appid=${api_key}` )
+    setData(res.data)
+  }
+
+  useEffect(()=>{
+    fetchWeather();
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='w-full d-flex justify-content-center min-vh-100 align-items-center'>
+     <div className='shadow-lg bg-white text-dark gap-4 mt-3 rounded'>
+        <Form/>
+        <Card data={data}/>
+     </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
